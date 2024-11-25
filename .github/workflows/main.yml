@@ -30,7 +30,7 @@ jobs:
         
     - name: Submit coverage to Coveralls
       env:
-        COVERALLS_SECRET: ${{ secrets.COVERALLS_SECRET }} 
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_SECRET }}
       run: |
         coveralls
     - name: SonarCloud Scan
