@@ -4,20 +4,22 @@ on: [push, pull_request]
 
 jobs:
   build:
+  
     runs-on: ubuntu-latest
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Set up Python 3.12.2
+    - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: "3.12.2"
+        python-version: '3.12.2'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest
         pip install pytest coverage coveralls
+        
     - name: Run tests with coverage
       run: |
         coverage run -m pytest test.py
@@ -25,9 +27,10 @@ jobs:
     - name: Run tests
       run: |
         pytest test.py
+        
     - name: Submit coverage to Coveralls
       env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_SECRET }} 
+        COVERALLS_SECRET: ${{ secrets.COVERALLS_SECRET }} 
       run: |
         coveralls
     - name: SonarCloud Scan
@@ -36,7 +39,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
         args: >
-          -Dsonar.projectKey=test1
+          -Dsonar.projectKey=reknik16
           -Dsonar.organization=reknik16
           -Dsonar.sources=.
           -Dsonar.python.coverage.reportPaths=coverage.xml 
