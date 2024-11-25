@@ -10,12 +10,12 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: '3.12.2'
+        python-version: '3.12.2'  
     
     - name: Install dependencies
       run: |
@@ -24,7 +24,13 @@ jobs:
     
     - name: Run tests with coverage
       run: |
-        coverage run -m pytest test.py
+        coverage run -m pytest test.py  
+        coverage report  
+        coverage xml  
+    
+    - name: Show coverage report
+      run: |
+        coverage report 
     
     - name: Submit coverage to Coveralls
       env:
@@ -40,6 +46,6 @@ jobs:
           -Dsonar.organization=reknik16
           -Dsonar.sources=.
           -Dsonar.python.coverage.reportPaths=coverage.xml
-          -Dsonar.python.version=3.12
+          -Dsonar.python.version=3.12.12
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
