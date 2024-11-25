@@ -1,17 +1,13 @@
 name: Test1
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-permissions:
-  contents: read
+on: [push, pull_request]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
     - name: Set up Python 3.12
       uses: actions/setup-python@v3
       with:
@@ -19,14 +15,27 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
+        pip install pytest
+        pip install pytest coverage coveralls
+    - name: Run tests with coverage
       run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
+        coverage run -m pytest test.py
+    
+    - name: Run tests
       run: |
-        pytest
+        pytest test.py
+    - name: Submit coverage to Coveralls
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_SECRET }} 
+      run: |
+        coveralls
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectKey=reknik16
+          -Dsonar.organization=reknik16
+          -Dsonar.sources=.
+          -Dsonar.python.coverage.reportPaths=coverage.xml 
