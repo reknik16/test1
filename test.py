@@ -31,3 +31,6 @@ class TestFindRoots(unittest.TestCase):
     def test_large_numbers(self):
         roots = find_roots(9000000, 800000, 700000)
         self.assertTrue(all(isinstance(root, complex) for root in roots))
+
+if __name__ == "__main__":
+    unittest.main()
