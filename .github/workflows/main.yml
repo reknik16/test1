@@ -10,7 +10,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4 # клонирование репозитория в виртуальную машину
 
     - name: Set up Python
       uses: actions/setup-python@v3
@@ -32,7 +32,7 @@ jobs:
       run: |
         coverage report 
     
-    - name: Submit coverage to Coveralls
+    - name: Submit coverage to Coveralls # загрузка отчёта о покрытии кода на платформу Coveralls.io.
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_SECRET }}
       run: |
