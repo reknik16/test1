@@ -1,5 +1,4 @@
 import unittest
-from cmath import isclose
 from main import find_roots
 
 class TestFindRoots(unittest.TestCase):
